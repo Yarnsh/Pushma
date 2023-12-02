@@ -1,0 +1,16 @@
+CollisionShape3D
+CharacterBody3D
+Node3D
+RayCast3D
+Node2D
+Sprite2D
+WorldEnvironment
+DirectionalLight3D
+MeshInstance3D
+Camera3D
+TextureRect
+SubViewport
+ColorRect
+OmniLight3D
+GPUParticles3D
+SubViewportContainer

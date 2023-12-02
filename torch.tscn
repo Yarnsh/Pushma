@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dt1o7v65vbp2c"]
+
+[ext_resource type="Material" uid="uid://6xa78m8j8bpc" path="res://green.tres" id="1_jowyb"]
+[ext_resource type="Material" uid="uid://bog4gjnxew2es" path="res://green_bright.tres" id="2_2kyhe"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7lg77"]
+material = ExtResource("1_jowyb")
+top_radius = 0.04
+bottom_radius = 0.025
+height = 1.0
+radial_segments = 4
+
+[sub_resource type="Curve" id="Curve_igpsq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_y1kfb"]
+curve = SubResource("Curve_igpsq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_heqw2"]
+direction = Vector3(0, 1, 0)
+spread = 3.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+scale_curve = SubResource("CurveTexture_y1kfb")
+
+[sub_resource type="SphereMesh" id="SphereMesh_oc2yi"]
+material = ExtResource("2_2kyhe")
+radius = 0.1
+height = 0.2
+radial_segments = 8
+rings = 4
+
+[node name="Torch" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.363673, 0)
+mesh = SubResource("CylinderMesh_7lg77")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.827232, 0)
+cast_shadow = 0
+amount = 6
+lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_heqw2")
+draw_pass_1 = SubResource("SphereMesh_oc2yi")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.765076, 0)
+shadow_enabled = true
+omni_range = 3.886
