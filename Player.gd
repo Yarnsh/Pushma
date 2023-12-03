@@ -63,7 +63,7 @@ func _input(event):
 			var col_parent = col.get_parent()
 			if col_parent.has_method("get_pushed"):
 				col_parent.get_pushed()
-				col.apply_impulse(-camera.global_transform.basis.z * 150.0, push_ray.get_collision_point() - col.global_position)
+				col.apply_impulse(-camera.global_transform.basis.z * 250.0, push_ray.get_collision_point() - col.global_position)
 	
 	if event is InputEventMouseMotion:
 		cam_x += event.relative.x * -(look_sensitivity)

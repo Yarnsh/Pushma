@@ -30,11 +30,6 @@ func _process(delta):
 			unragdoll()
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("test"):
-		ragdoll(99999.0)
-	if Input.is_action_just_released("test"):
-		unragdoll()
-	
 	if !ragdolled:
 		velocity.y -= 9.8 * delta
 		move_and_slide()
