@@ -20,9 +20,9 @@ curve = SubResource("Curve_igpsq")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_heqw2"]
 direction = Vector3(0, 1, 0)
 spread = 3.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 2.0
 initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
 scale_curve = SubResource("CurveTexture_y1kfb")
 
 [sub_resource type="SphereMesh" id="SphereMesh_oc2yi"]

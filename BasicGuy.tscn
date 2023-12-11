@@ -1,12 +1,14 @@
-[gd_scene load_steps=20 format=3 uid="uid://bwrjom21x4gmq"]
+[gd_scene load_steps=26 format=3 uid="uid://bwrjom21x4gmq"]
 
 [ext_resource type="Script" path="res://UnragdollFollower.gd" id="1_38wwr"]
+[ext_resource type="Script" path="res://GuySettings.gd" id="1_nhhvw"]
 [ext_resource type="Shape3D" uid="uid://dsw8st1ela2w2" path="res://TallCapsule.tres" id="2_rrda8"]
 [ext_resource type="Script" path="res://Guy.gd" id="3_0gh0e"]
 [ext_resource type="PackedScene" uid="uid://cwknum5y3xbqx" path="res://Guy.fbx" id="4_hxryg"]
 [ext_resource type="Script" path="res://PhysicsBonesExceptionAdder.gd" id="5_r814e"]
 [ext_resource type="Shape3D" uid="uid://bq3wgwtw1lx1f" path="res://BodyColliderShapes/HipsShape.tres" id="6_hut02"]
 [ext_resource type="Shape3D" uid="uid://oopnt7m2vi5c" path="res://BodyColliderShapes/LowerSpineShape.tres" id="7_334cm"]
+[ext_resource type="Script" path="res://CopyGlobalRotation.gd" id="8_7iji0"]
 [ext_resource type="Shape3D" uid="uid://c25tbpda5mqc2" path="res://BodyColliderShapes/MidSpineShape.tres" id="8_hug8g"]
 [ext_resource type="Shape3D" uid="uid://d2diuwpsndln6" path="res://BodyColliderShapes/ChestShape.tres" id="9_ejuiu"]
 [ext_resource type="Shape3D" uid="uid://cm226fa77q87d" path="res://BodyColliderShapes/NeckShape.tres" id="10_7jy3h"]
@@ -18,12 +20,52 @@
 [ext_resource type="Shape3D" uid="uid://b5shewavypcgw" path="res://BodyColliderShapes/ForearmShape.tres" id="14_j6uja"]
 [ext_resource type="Shape3D" uid="uid://nu4miok6s3c6" path="res://BodyColliderShapes/HandShape.tres" id="15_4ie5w"]
 [ext_resource type="Shape3D" uid="uid://b4s3ofv4q56i3" path="res://BodyColliderShapes/ThighShape.tres" id="15_7gh7q"]
+[ext_resource type="Script" path="res://ShoveHands.gd" id="19_wox00"]
+[ext_resource type="Texture2D" uid="uid://c6uil7adjtyaq" path="res://lumi_arms.png" id="20_blphq"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_wk5nb"]
+properties/0/path = NodePath("GuyBody:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("GuyBody:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("GuyBody:velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 0
+properties/3/path = NodePath("GuyBody:should_ragdoll")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("GuyBody:unragdoll_time")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("GuyBody/Guy:rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ibn41"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wkri6"]
 radius = 0.0405994
 height = 0.405994
 
 [node name="GuyOrigin" type="Node3D"]
+script = ExtResource("1_nhhvw")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_wk5nb")
 
 [node name="UnragdollFollower" type="CharacterBody3D" parent="."]
 collision_layer = 0
@@ -43,6 +85,7 @@ axis_lock_angular_z = true
 script = ExtResource("3_0gh0e")
 
 [node name="Guy" parent="GuyBody" instance=ExtResource("4_hxryg")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="GuyBody/Guy/RootNode/Armature" index="0"]
 bones/0/position = Vector3(0.00173424, 0.000809571, 0.932219)
@@ -94,12 +137,12 @@ bones/75/rotation = Quaternion(0.242687, 0.0351502, 0.0130467, 0.96938)
 script = ExtResource("5_r814e")
 
 [node name="Physical Bone mixamorig_Hips" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="2"]
-transform = Transform3D(0.722873, -0.676689, -0.139817, -0.69098, -0.707369, -0.148917, 0.00186779, 0.204258, -0.978909, 0.00467098, 0.00273579, 0.925706)
+transform = Transform3D(0.722869, -0.676689, -0.139767, -0.690957, -0.707367, -0.148916, 0.00186971, 0.204256, -0.976186, 0.00467098, 0.00273579, 0.925706)
 collision_layer = 4
 collision_mask = 13
-joint_offset = Transform3D(1, 7.45058e-09, 1.86265e-09, -7.45058e-09, 1, -1.49012e-08, -1.86265e-09, 1.49012e-08, 1, -0.000779735, 0.00468017, -0.00567835)
+joint_offset = Transform3D(1, 7.45058e-09, 1.86265e-09, -7.45058e-09, 1, -1.49012e-08, -1.86265e-09, 1.49012e-08, 1, -0.00077951, 0.00468314, -0.00569357)
 joint_rotation = Vector3(1.49012e-08, 1.86265e-09, -7.45058e-09)
-body_offset = Transform3D(0.999998, 0.00273061, 0.000635989, 0.000296529, 0.122522, -0.992459, -0.00278887, 0.992462, 0.122522, 0.000770565, -0.00620872, -0.00395134)
+body_offset = Transform3D(0.999978, 0.00272924, 0.000676669, 0.000299633, 0.12252, -0.989743, -0.00280261, 0.99246, 0.122713, 0.000770564, -0.00620872, -0.00395134)
 mass = 6.0
 bone_name = "mixamorig_Hips"
 
@@ -107,13 +150,25 @@ bone_name = "mixamorig_Hips"
 transform = Transform3D(1, 2.61934e-10, 8.14907e-10, 9.31323e-10, 1.11759e-07, 1, 1.09139e-10, -1, -7.45058e-09, -6.26239e-06, -0.00372881, 0.0297766)
 shape = ExtResource("6_hut02")
 
+[node name="RagdollCameraPivot" type="Node3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Hips" node_paths=PackedStringArray("other")]
+script = ExtResource("8_7iji0")
+other = NodePath("../../../../../../Camera3D")
+
+[node name="RagdollCamera" type="Camera3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Hips/RagdollCameraPivot"]
+transform = Transform3D(1.00001, 9.77516e-06, -4.05312e-06, 1.19209e-07, 1, -2.21804e-05, -7.45058e-09, 4.47035e-08, 1.00013, 0, 0, 3)
+cull_mask = 524287
+current = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Hips"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_Spine" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="3"]
-transform = Transform3D(0.77586, -0.625573, -0.0819068, -0.63069, -0.772435, -0.0746252, -0.0165839, 0.109556, -0.993848, 0.0165001, 0.01591, 1.03939)
+transform = Transform3D(0.775842, -0.625573, -0.0819094, -0.63063, -0.772431, -0.074627, -0.0165777, 0.109554, -0.993867, 0.0164998, 0.0159101, 1.03937)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000248623, -0.000379405, 0.00930845)
-body_offset = Transform3D(0.999994, 0.00399488, 0.000413816, 0.000413746, 0.0002467, -1.00001, -0.00400198, 0.999992, 0.000244919, 0.000246285, 0.0093087, 0.000376128)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000248725, -0.000377251, 0.00928812)
+body_offset = Transform3D(0.999942, 0.00399148, 0.000413302, 0.000422902, 0.000244807, -1.00003, -0.00403571, 0.999989, 0.000245836, 0.000246378, 0.00928855, 0.00037396)
 mass = 6.0
 bone_name = "mixamorig_Spine"
 joint_constraints/x/linear_limit_enabled = true
@@ -184,13 +239,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.999999, 4.77716e-06, -1.12091e-05, 1.04414e-05, 0.138205, 0.990404, 6.27912e-06, -0.990404, 0.138205, 8.31744e-07, 0.0272721, 0.00328147)
 shape = ExtResource("7_334cm")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Spine"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_Spine1" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="4"]
-transform = Transform3D(0.866697, -0.498675, 0.0129639, -0.497725, -0.862713, 0.0891908, -0.0332924, -0.0837528, -0.99593, 0.0217914, 0.0135269, 1.20622)
+transform = Transform3D(0.860232, -0.494652, 0.0129643, -0.485286, -0.849666, 0.0891888, -0.0336105, -0.0834746, -0.995923, 0.0217913, 0.0135266, 1.20622)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000277224, -0.00617245, 0.0602905)
-body_offset = Transform3D(1, 0.00187996, -7.81454e-05, -7.8287e-05, -7.20918e-05, -1, -0.00189775, 0.99998, -7.0855e-05, 0.00029354, 0.06029, 0.00617608)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000299747, -0.00625826, 0.0602972)
+body_offset = Transform3D(0.988201, -0.0011619, -7.71098e-05, -0.00141931, -0.00100962, -0.999993, -0.0093565, 0.9867, -6.99386e-05, 0.000293588, 0.06029, 0.00617644)
 mass = 6.0
 bone_name = "mixamorig_Spine1"
 joint_constraints/x/linear_limit_enabled = true
@@ -261,13 +319,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.999999, 2.96755e-06, -5.55168e-06, 5.33571e-06, 0.0683113, 0.997664, 3.34123e-06, -0.997664, 0.0683114, 6.93224e-07, 0.0188404, 0.00229418)
 shape = ExtResource("8_hug8g")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Spine1"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_Spine2" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="5"]
-transform = Transform3D(-0.936509, 0.322847, 0.13683, 0.350153, 0.840368, 0.413733, 0.0185852, 0.435375, -0.900058, 0.0141011, -0.0174799, 1.34525)
+transform = Transform3D(-0.936511, 0.322848, 0.136831, 0.350152, 0.84037, 0.413734, 0.0185848, 0.435374, -0.90006, 0.0141008, -0.0174798, 1.34525)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000301821, 8.86782e-05, 0.0717286)
-body_offset = Transform3D(-0.999999, -0.00157613, -0.000911191, 0.000818312, 0.058077, -0.998313, 0.00162679, -0.998311, -0.0580759, 0.000367319, 0.0716022, 0.00425375)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000301613, 8.90675e-05, 0.0717277)
+body_offset = Transform3D(-1, -0.00157544, -0.000909731, 0.00081858, 0.0580752, -0.998315, 0.00162855, -0.998312, -0.0580763, 0.000367006, 0.0716014, 0.0042541)
 mass = 6.0
 bone_name = "mixamorig_Spine2"
 joint_constraints/x/linear_limit_enabled = true
@@ -338,13 +399,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, -1.80898e-09, 1.11613e-08, 7.44876e-09, -7.45058e-09, 1, -8.38259e-09, -0.999999, 4.84288e-08, -7.24444e-06, -0.0519107, 0.0365758)
 shape = ExtResource("9_ejuiu")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Spine2"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_Neck" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="6"]
-transform = Transform3D(-0.92944, 0.304099, 0.208964, 0.368192, 0.727547, 0.578887, 0.0240075, 0.614979, -0.788178, -0.00972738, -0.0895813, 1.48205)
+transform = Transform3D(-0.929441, 0.3041, 0.208986, 0.36819, 0.727547, 0.578807, 0.0240067, 0.614981, -0.788229, -0.00972739, -0.0895811, 1.48205)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001276, -0.00776274, 0.0775153)
-body_offset = Transform3D(-1, -0.000692695, -0.000423819, 0.000205845, 0.289208, -0.957266, 0.000785977, -0.957266, -0.289208, 0.00130348, 0.0764476, 0.014986)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00127992, -0.00775607, 0.0775149)
+body_offset = Transform3D(-1, -0.000691652, -0.000372469, 0.000206068, 0.289209, -0.957289, 0.000788838, -0.957267, -0.289128, 0.00130343, 0.076447, 0.0149861)
 bone_name = "mixamorig_Neck"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -414,13 +478,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, -1.34605e-10, -2.76486e-10, -7.27596e-11, -9.83477e-07, 1, 2.47894e-10, -1, -3.8743e-07, 9.69274e-07, -0.0110723, -0.00334907)
 shape = ExtResource("10_7jy3h")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Neck"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_Head" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="7"]
-transform = Transform3D(-0.996117, -0.0210084, 0.0854047, 0.0326792, 0.813123, 0.581173, -0.0816516, 0.581711, -0.809285, -0.0234503, -0.139087, 1.47137)
+transform = Transform3D(-0.996118, -0.0210132, 0.0854052, 0.032679, 0.813123, 0.580308, -0.0816505, 0.581711, -0.808559, -0.0234502, -0.139078, 1.47127)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00526099, 0.0388462, -0.00830056)
-body_offset = Transform3D(-0.999992, 3.59733e-05, -0.000377551, 0.000368966, 0.343358, -0.939204, 9.49837e-05, -0.939204, -0.343359, -0.00526548, -0.0211321, 0.0336349)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00527053, 0.0388969, -0.00839893)
+body_offset = Transform3D(-0.999992, 3.11639e-05, -0.000289049, 0.000370081, 0.343358, -0.938276, 9.4898e-05, -0.939204, -0.342721, -0.00527413, -0.0212342, 0.0336542)
 mass = 3.0
 bone_name = "mixamorig_Head"
 joint_constraints/x/linear_limit_enabled = true
@@ -491,13 +558,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, 5.83825e-05, -2.15681e-05, 4.88024e-05, -0.520491, 0.853877, 3.86264e-05, -0.85387, -0.520487, -9.35793e-06, 0.045876, -0.0757642)
 shape = ExtResource("11_a7xr6")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_Head"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftShoulder" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="8"]
-transform = Transform3D(0.108103, 0.0278445, -0.99375, 0.897165, 0.427885, 0.109585, 0.428262, -0.903404, 0.0212745, 0.131893, -0.0510039, 1.34928)
+transform = Transform3D(0.108104, 0.0278446, -0.99375, 0.897164, 0.427885, 0.109585, 0.428262, -0.903403, 0.0212743, 0.131893, -0.0510039, 1.34928)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34816e-05, -0.011285, 0.0644893)
-body_offset = Transform3D(0.999999, 0.000357598, 0.000786439, 0.000786908, 6.50063e-06, -1, -0.000357509, 1, 6.19143e-06, -3.31998e-05, 0.0644894, 0.0112846)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34645e-05, -0.0112851, 0.0644893)
+body_offset = Transform3D(0.999999, 0.000357747, 0.0007862, 0.000787437, 6.63474e-06, -1, -0.000357509, 0.999998, 6.23986e-06, -3.31998e-05, 0.0644894, 0.0112847)
 mass = 6.0
 bone_name = "mixamorig_LeftShoulder"
 joint_constraints/x/linear_limit_enabled = true
@@ -568,13 +638,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, 0, 1.33732e-08, -2.45564e-11, 2.95358e-10, 1, -2.98023e-08, -1, -6.03791e-09, 3.83519e-05, -0.00902331, 0.000186168)
 shape = ExtResource("12_58tao")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftShoulder"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftArm" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="9"]
-transform = Transform3D(0.279539, -0.880133, -0.383666, 0.939356, 0.333197, -0.0797822, 0.198036, -0.338149, 0.919993, 0.249069, -0.0525095, 1.23111)
+transform = Transform3D(0.236413, -0.880132, -0.381455, 0.729092, 0.333197, -0.0786095, 0.150506, -0.338148, 0.911436, 0.249069, -0.0525094, 1.23111)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000587177, 0.000382885, 0.138085)
-body_offset = Transform3D(0.999874, 0.00102451, 0.000576243, 0.000584953, -0.00691429, -0.999952, -0.00102672, 0.999975, -0.00691481, -0.000667065, 0.138081, 0.000572562)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000747214, 0.000208589, 0.139321)
+body_offset = Transform3D(0.780844, 0.00102443, 0.000597931, 0.0109742, -0.00691463, -0.991147, -0.0167616, 0.999974, -0.00551648, -0.000666976, 0.138081, 0.000572503)
 mass = 3.0
 bone_name = "mixamorig_LeftArm"
 joint_constraints/x/linear_limit_enabled = true
@@ -645,13 +718,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = ExtResource("13_d63pl")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftArm"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftForeArm" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="10"]
-transform = Transform3D(0.587577, -0.809168, -0.0009594, 0.616754, 0.447084, 0.64787, -0.523803, -0.381265, 0.761749, 0.284323, -0.115309, 0.990546)
+transform = Transform3D(0.587575, -0.809186, -0.00095976, 0.616772, 0.447065, 0.647839, -0.523786, -0.381236, 0.761709, 0.284609, -0.11365, 0.986364)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00445249, -0.0261957, 0.136297)
-body_offset = Transform3D(0.999994, 0.00379154, 0.00013414, 0.000130832, -0.000794888, -0.999999, -0.00379115, 0.999993, -0.000794202, 0.0045335, 0.136276, 0.0262868)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00783603, -0.0283004, 0.138415)
+body_offset = Transform3D(0.999995, 0.00375384, 0.000135779, 0.000106961, -0.000803947, -0.999948, -0.00378847, 0.999988, -0.000792474, 0.00792342, 0.138386, 0.0283801)
 mass = 2.0
 bone_name = "mixamorig_LeftForeArm"
 joint_constraints/x/linear_limit_enabled = true
@@ -722,13 +798,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1.00001, -6.40284e-10, 3.08501e-09, -5.12227e-09, 6.31303e-10, 1, 1.08266e-08, -1, -5.49278e-10, 1.47596e-05, -0.0178008, 6.91414e-06)
 shape = ExtResource("14_j6uja")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftForeArm"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftHand" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="11"]
-transform = Transform3D(0.0251863, 0.833364, 0.552151, -0.578903, -0.438134, 0.687684, 0.815007, -0.336962, 0.471402, 0.284988, -0.23719, 0.85294)
+transform = Transform3D(0.0251867, 0.833364, 0.552155, -0.578903, -0.438134, 0.687681, 0.815007, -0.336962, 0.471403, 0.28499, -0.237191, 0.852938)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0261864, -0.00677308, 0.0420778)
-body_offset = Transform3D(-0.57651, 0.572069, 0.583415, -0.00158516, 0.713232, -0.700926, -0.817088, -0.405016, -0.410279, -0.00557742, 0.0343657, 0.035917)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0261878, -0.00677627, 0.0420788)
+body_offset = Transform3D(-0.57651, 0.572069, 0.583416, -0.00158513, 0.713232, -0.700924, -0.817088, -0.405016, -0.410283, -0.00557545, 0.0343686, 0.0359175)
 bone_name = "mixamorig_LeftHand"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -798,13 +877,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.822869, -0.568447, -0.0011799, 0.401308, 0.582374, -0.707082, 0.402609, 0.581289, 0.707199, 0.0148041, 0.0691065, -0.0413807)
 shape = ExtResource("15_4ie5w")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftHand"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightShoulder" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="12"]
-transform = Transform3D(-0.394685, 0.257221, 0.882086, -0.807987, 0.359921, -0.466372, -0.437471, -0.896818, 0.0653528, -0.173561, 0.0379846, 1.39748)
+transform = Transform3D(-0.394689, 0.257221, 0.882156, -0.807993, 0.359918, -0.465183, -0.437461, -0.896807, 0.0611386, -0.173561, 0.0379846, 1.39748)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00038445, 0.0476266, 0.129997)
-body_offset = Transform3D(0.999998, 0.000169039, 0.0019711, 0.0018847, -0.00103854, -0.999923, -0.000168264, 0.999993, -0.000614747, -0.000648737, 0.130036, -0.0475463)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000273324, 0.0470773, 0.130097)
+body_offset = Transform3D(1, 0.000166923, 0.00282523, 0.00188491, -0.00104074, -0.999156, -0.000181258, 0.999983, 0.00361156, -0.000648737, 0.130036, -0.0475463)
 mass = 6.0
 bone_name = "mixamorig_RightShoulder"
 joint_constraints/x/linear_limit_enabled = true
@@ -875,13 +957,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(-1, 1.04308e-07, 2.46178e-07, 5.57338e-09, -2.34722e-08, 1, 1.04308e-07, 1, 1.02918e-07, 0.000559796, 0.0598552, 0.0530555)
 shape = ExtResource("12_58tao")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightShoulder"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightArm" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="13"]
-transform = Transform3D(-0.561145, 0.81228, 0.158875, -0.683756, -0.347529, -0.640178, -0.46459, -0.468418, 0.749969, -0.167905, 0.135622, 1.23535)
+transform = Transform3D(-0.560633, 0.812297, 0.158877, -0.67998, -0.350309, -0.639912, -0.460072, -0.466336, 0.749618, -0.167905, 0.135622, 1.23534)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00372068, -0.0219318, 0.143027)
-body_offset = Transform3D(0.999114, 0.00388685, -0.00148755, -0.00162995, -0.00103278, -0.998759, -0.00444397, 0.999988, -0.000792667, 0.00401539, 0.142821, 0.0220283)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00371674, -0.0219541, 0.143168)
+body_offset = Transform3D(0.994126, 0.00480591, -0.00150567, -0.00267363, -0.00438148, -0.998326, -0.00743853, 0.999986, -0.000718772, 0.00401598, 0.142822, 0.022029)
 mass = 3.0
 bone_name = "mixamorig_RightArm"
 joint_constraints/x/linear_limit_enabled = true
@@ -952,13 +1037,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1.00002, -2.32831e-10, 2.2701e-09, 9.09495e-10, -1.45115e-07, 1, -7.05768e-10, -1, -1.10186e-09, 1.56462e-07, -0.0156689, -5.66244e-07)
 shape = ExtResource("13_d63pl")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightArm"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightForeArm" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="14"]
-transform = Transform3D(-0.355739, 0.840583, 0.408488, -0.913758, -0.404581, 0.0367751, 0.196185, -0.360186, 0.911991, -0.248686, 0.21754, 1.00917)
+transform = Transform3D(-0.355753, 0.840584, 0.408496, -0.913777, -0.404581, 0.0367704, 0.196192, -0.360186, 0.911953, -0.248882, 0.217539, 1.0084)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000145527, -0.017956, 0.145497)
-body_offset = Transform3D(0.999995, 0.000896096, 0.000598997, 0.000600822, -0.00197174, -0.999969, -0.000896871, 0.999998, -0.00196887, -0.000216588, 0.145457, 0.0182426)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000226533, -0.0180704, 0.146281)
+body_offset = Transform3D(1.00002, 0.000896096, 0.000592869, 0.000600364, -0.00197173, -0.999938, -0.000904202, 0.999998, -0.00194615, -0.00029707, 0.146236, 0.0183553)
 mass = 2.0
 bone_name = "mixamorig_RightForeArm"
 joint_constraints/x/linear_limit_enabled = true
@@ -1029,13 +1117,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1.00001, 0, 4.03816e-10, 1.92813e-10, -7.05984e-12, 1, -7.56017e-12, -1, -1.60813e-11, -6.37025e-07, -0.00774336, -5.36442e-07)
 shape = ExtResource("14_j6uja")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightForeArm"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightHand" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="15"]
-transform = Transform3D(0.896479, -0.440702, -0.0458959, 0.287447, 0.499623, 0.817156, -0.337193, -0.74576, 0.57458, -0.291598, 0.191877, 0.879496)
+transform = Transform3D(0.896477, -0.4407, -0.0458933, 0.287447, 0.499622, 0.81715, -0.337193, -0.745761, 0.574579, -0.291599, 0.191836, 0.879424)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0211648, 0.0126709, 0.0340339)
-body_offset = Transform3D(-0.575704, -0.581002, -0.575324, -0.000831187, 0.704044, -0.710155, 0.817657, -0.408361, -0.405801, 0.0147577, 0.0152309, 0.0362909)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0211765, 0.0126376, 0.0341088)
+body_offset = Transform3D(-0.575704, -0.581002, -0.575319, -0.000830881, 0.704044, -0.710154, 0.817656, -0.40836, -0.405797, 0.0147745, 0.0153074, 0.0363171)
 bone_name = "mixamorig_RightHand"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -1105,13 +1196,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.827364, 0.561591, -0.0109382, -0.406749, 0.58564, -0.701146, -0.387334, 0.584548, 0.712934, -0.0128069, 0.0722762, -0.038318)
 shape = ExtResource("15_4ie5w")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightHand"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftUpLeg" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="16"]
-transform = Transform3D(-0.845184, -0.516221, 0.138488, 0.510659, -0.703461, 0.49434, -0.157767, 0.488527, 0.858169, 0.0411354, -0.161093, 0.682924)
+transform = Transform3D(-0.845185, -0.516223, 0.138487, 0.51066, -0.703461, 0.494343, -0.157767, 0.488529, 0.858171, 0.0411354, -0.161093, 0.682924)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000177179, 0.010708, 0.207263)
-body_offset = Transform3D(0.999994, -0.00316298, 0.00136411, 0.00138488, 0.0069291, -0.999977, 0.00315365, 0.999971, 0.00693318, -0.000426039, 0.207184, -0.0121452)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00017673, 0.0107081, 0.207262)
+body_offset = Transform3D(0.999995, -0.00316244, 0.0013659, 0.00138494, 0.00692791, -0.999981, 0.00315371, 0.999973, 0.00693241, -0.000425965, 0.207184, -0.0121452)
 mass = 5.0
 bone_name = "mixamorig_LeftUpLeg"
 joint_constraints/x/linear_limit_enabled = true
@@ -1182,13 +1276,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_wkri6")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftUpLeg"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftLeg" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="17"]
-transform = Transform3D(-0.702308, -0.685579, -0.191723, 0.700892, -0.713038, -0.0177361, -0.124526, -0.146813, 0.98106, 0.0436023, -0.254461, 0.289572)
+transform = Transform3D(-0.70231, -0.685578, -0.191733, 0.700884, -0.713036, -0.0177361, -0.124526, -0.146812, 0.980965, 0.0408728, -0.249997, 0.286524)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0119782, 0.00207803, 0.232523)
-body_offset = Transform3D(0.999991, -0.00299564, -0.00104698, -0.001099, -0.000612495, -0.999775, 0.00300196, 0.999993, -0.000560446, 0.0122277, 0.232459, -0.00191174)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0174081, 0.00293716, 0.235093)
+body_offset = Transform3D(0.999987, -0.00299507, -0.00102768, -0.00109957, -0.000613384, -0.999683, 0.00300875, 0.999991, -0.000539076, 0.0176583, 0.235001, -0.00275802)
 mass = 3.0
 bone_name = "mixamorig_LeftLeg"
 joint_constraints/x/linear_limit_enabled = true
@@ -1259,13 +1356,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 1.2815e-06, -0.0209098, -0.00102159)
 shape = ExtResource("13_74wq4")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftLeg"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_LeftFoot" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="18"]
-transform = Transform3D(-0.715717, -0.352764, 0.602754, 0.696411, -0.295492, 0.653985, -0.0525935, 0.88783, 0.457156, 0.0390193, -0.308818, 0.0690693)
+transform = Transform3D(-0.715729, -0.352763, 0.602755, 0.696377, -0.295492, 0.653979, -0.0525883, 0.887829, 0.457156, 0.0390018, -0.308804, 0.0690568)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00322091, 0.00157187, 0.0770504)
-body_offset = Transform3D(0.999998, -0.00164455, 0.00275326, 0.00275701, 0.00067091, -0.999996, 0.00164372, 0.999998, 0.000675529, 0.00301135, 0.0770579, -0.00161862)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00324335, 0.00158083, 0.0770578)
+body_offset = Transform3D(0.999982, -0.00164418, 0.0027487, 0.00278369, 0.000671059, -0.999992, 0.00166243, 0.999997, 0.000676483, 0.00303409, 0.0770652, -0.00162756)
 bone_name = "mixamorig_LeftFoot"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -1335,13 +1435,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.990746, -0.134259, -0.0199077, 0.067717, 0.361843, 0.929776, -0.117627, -0.922521, 0.367586, 0.001, -0.015, -0.007)
 shape = ExtResource("14_7ka4m")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_LeftFoot"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightUpLeg" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="19"]
-transform = Transform3D(-0.488643, -0.84082, 0.232948, 0.840639, -0.525161, -0.132286, 0.23357, 0.131185, 0.96345, -0.114867, 0.0869757, 0.669914)
+transform = Transform3D(-0.48858, -0.840839, 0.232948, 0.840229, -0.524778, -0.132286, 0.23351, 0.131139, 0.96345, -0.114868, 0.0869742, 0.669916)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000181173, -0.000266747, 0.203186)
-body_offset = Transform3D(0.999995, -0.00293624, 0.00050509, 0.000507697, 0.000904232, -0.999999, 0.00296721, 0.999986, 0.000899322, -0.000284582, 0.203186, 8.34763e-05)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000181927, -0.000268437, 0.203185)
+body_offset = Transform3D(0.999606, -0.00261572, 0.00050506, 0.000497423, 0.00100317, -0.999999, 0.00312054, 0.999796, 0.000899322, -0.000285178, 0.203185, 8.50856e-05)
 mass = 5.0
 bone_name = "mixamorig_RightUpLeg"
 joint_constraints/x/linear_limit_enabled = true
@@ -1412,13 +1515,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, -1.99134e-09, -2.91038e-11, 0, 0, 1, -2.0168e-10, -1, 0, 0.0121229, -5.78854e-05, 0.00437063)
 shape = ExtResource("15_7gh7q")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightUpLeg"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightLeg" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="20"]
-transform = Transform3D(-0.365405, -0.889517, -0.274304, 0.887939, -0.244646, -0.389498, 0.279356, -0.385888, 0.879231, -0.104378, 0.196732, 0.285924)
+transform = Transform3D(-0.365408, -0.889518, -0.274303, 0.887934, -0.244646, -0.389498, 0.279356, -0.385888, 0.879225, -0.104378, 0.196731, 0.285924)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00051856, -0.000999793, 0.214014)
-body_offset = Transform3D(0.999995, -0.00227366, -0.000161976, -0.000164509, -0.000803031, -0.999999, 0.00227652, 0.999998, -0.000800982, -0.000486165, 0.214013, 0.00117003)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000519105, -0.00100107, 0.214015)
+body_offset = Transform3D(0.999992, -0.00227341, -0.00016439, -0.000167161, -0.000803456, -0.999994, 0.00228031, 0.999998, -0.000799291, -0.000486195, 0.214013, 0.00117095)
 mass = 3.0
 bone_name = "mixamorig_RightLeg"
 joint_constraints/x/linear_limit_enabled = true
@@ -1489,13 +1595,16 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(1, -1.49794e-09, -6.54836e-11, -2.32831e-10, 1.49012e-08, 1, -2.13186e-09, -1, 7.45058e-09, 1.2815e-06, -0.0209098, -0.00102159)
 shape = ExtResource("13_74wq4")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightLeg"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="Physical Bone mixamorig_RightFoot" type="PhysicalBone3D" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D" index="21"]
-transform = Transform3D(-0.315661, -0.422634, 0.849557, 0.947542, -0.188333, 0.258353, 0.0508115, 0.886516, 0.459899, -0.11362, 0.255213, 0.0683751)
+transform = Transform3D(-0.315691, -0.422634, 0.849561, 0.947607, -0.188333, 0.258354, 0.0508124, 0.886515, 0.459901, -0.11362, 0.255213, 0.0683751)
 collision_layer = 4
 collision_mask = 13
 joint_type = 5
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00233982, -0.000538424, 0.0795148)
-body_offset = Transform3D(1.00003, -0.00053522, 0.00126489, 0.00127032, 0.00289701, -0.999995, 0.000532284, 0.999995, 0.00289723, -0.00244075, 0.079513, 0.000306804)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00233966, -0.000538397, 0.0795144)
+body_offset = Transform3D(1.0001, -0.000534981, 0.00126484, 0.00127831, 0.00289692, -1, 0.000533387, 0.999994, 0.00289677, -0.00244075, 0.079513, 0.000306811)
 bone_name = "mixamorig_RightFoot"
 joint_constraints/x/linear_limit_enabled = true
 joint_constraints/x/linear_limit_upper = 0.0
@@ -1565,8 +1674,28 @@ joint_constraints/z/angular_equilibrium_point = 0.0
 transform = Transform3D(0.990747, 0.134284, 0.0197092, -0.0676219, 0.362485, 0.929534, 0.117677, -0.922266, 0.368211, -0.000730783, -0.0145031, -0.00725232)
 shape = ExtResource("14_7ka4m")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="GuyBody/Guy/RootNode/Armature/Skeleton3D/Physical Bone mixamorig_RightFoot"]
+replication_config = SubResource("SceneReplicationConfig_ibn41")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GuyBody"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.865, 0)
 shape = ExtResource("2_rrda8")
+
+[node name="Camera3D" type="Camera3D" parent="GuyBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41129, 0)
+cull_mask = 524287
+fov = 90.0
+
+[node name="RayCast3D" type="RayCast3D" parent="GuyBody/Camera3D"]
+target_position = Vector3(0, 0, -1)
+collision_mask = 5
+
+[node name="Hands" type="Node2D" parent="GuyBody"]
+script = ExtResource("19_wox00")
+
+[node name="ShoveHands" type="Sprite2D" parent="GuyBody/Hands"]
+z_index = 4
+position = Vector2(0, 450)
+texture = ExtResource("20_blphq")
 
 [editable path="GuyBody/Guy"]

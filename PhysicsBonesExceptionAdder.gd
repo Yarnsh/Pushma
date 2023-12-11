@@ -14,5 +14,10 @@ func _ready():
 func _process(delta):
 	pass
 
-func get_pushed():
-	guy.ragdoll(4.0)
+@rpc("any_peer", "call_local", "unreliable")
+func get_pushed(body_name, force, pos):
+	if multiplayer.get_unique_id() == get_multiplayer_authority():
+		guy.ragdoll(4.0)
+		get_node(body_name).apply_impulse(force, pos)
+	else:
+		rpc_id(get_multiplayer_authority(), "get_pushed", body_name, force, pos)

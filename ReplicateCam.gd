@@ -1,6 +1,6 @@
 extends Camera3D
 
-@export var other : Camera3D
+@export var other_port : SubViewport
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -9,4 +9,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	global_rotation = other.global_rotation
+	var other = other_port.get_camera_3d()
+	if other != null:
+		global_rotation = other.global_rotation
